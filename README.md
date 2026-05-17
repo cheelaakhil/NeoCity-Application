@@ -1,42 +1,86 @@
-# 🏥 SMART Citizen Wellbeing Recommender
+# Smart Citizen Application
 
-> An AI-powered service recommendation system prioritizing healthcare and citizen wellbeing.
-
-## 📖 Overview
-The **SMART Citizen Wellbeing Recommender** is a full-stack web application designed to help citizens connect with the right public or private services based on their immediate needs.
-
-Unlike standard search engines, this system uses an **Intelligent Triage Agent** ("CivicMate") to:
-1.  **Analyze Intent:** Understands if a user needs routine care (e.g., Yoga) or critical help (e.g., Emergency).
-2.  **Prioritize Safety:** Immediately detects medical emergencies and overrides recommendations with safety protocols.
-3.  **Hybrid Recommendation:** Scores services based on urgency, rating, wait times, and location.
+A full-stack Java web application built using Spring Boot, REST APIs, and PostgreSQL — designed to manage citizen data with complete CRUD operations, a layered MVC architecture, and comprehensive backend validation.
 
 ---
 
-## 🚀 Features
-* **Conversational Interface:** Natural language chat interface for easy interaction.
-* **Emergency Guardrails:** Zero-latency detection of critical keywords (e.g., "Chest pain", "Suicide") to trigger red-alert warnings.
-* **Smart Scoring Engine:** Algorithms that weigh *Urgency* vs. *Distance* vs. *Quality*.
-* **Dual-Tier Service Database:** Distinguishes between Public (Govt) and Private services.
+## Features
+
+- REST web services built with Spring Boot and Spring REST
+- Full CRUD operations on citizen records via JDBC and PostgreSQL
+- MVC architecture separating presentation, service, and data layers
+- Unit testing with JUnit and Mockito for backend validation
+- SLF4J logging and code coverage implementation
+- Responsive UI following component design specifications
 
 ---
 
-## 🛠️ Tech Stack
-* **Backend:** Node.js, Express.js
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript (Single Page Application)
-* **AI/Logic:** Rule-Based NLP (v1), LangChain.js (Ready for v2 integration)
-* **Data:** JSON-based Mock Registry (Scalable to MongoDB/PostgreSQL)
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Java, Spring Boot, Spring MVC, Spring REST |
+| Database | PostgreSQL, JDBC |
+| Testing | JUnit, Mockito, SLF4J |
+| Tools | Eclipse, Git, Postman |
 
 ---
 
-## ⚙️ Installation & Setup
+## Project Structure
 
-### 1. Prerequisites
-Ensure you have **Node.js** installed on your machine.
+```
+smart-citizen-Application/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── controller/       # Spring MVC controllers (presentation layer)
+│   │   │   ├── service/          # Business logic layer
+│   │   │   ├── repository/       # JDBC database access
+│   │   │   └── model/            # Entity classes
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/
+│       └── java/                 # JUnit + Mockito test cases
+└── pom.xml
+```
 
-### 2. Clone/Download
-Download the project files to your local directory.
+---
 
-### 3. Install Dependencies
-Open your terminal in the project folder and run:
+## How to Run
+
+**Prerequisites:** Java 17+, PostgreSQL, Maven
+
 ```bash
-npm install
+# Clone the repository
+git clone https://github.com/cheelaakhil/smart-citizen-Application.git
+cd smart-citizen-Application
+
+# Configure database
+# Edit src/main/resources/application.properties:
+# spring.datasource.url=jdbc:postgresql://localhost:5432/smartcitizen
+# spring.datasource.username=your_username
+# spring.datasource.password=your_password
+
+# Build and run
+mvn spring-boot:run
+```
+
+App runs at `http://localhost:8080`
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/citizens` | Get all citizens |
+| GET | `/api/citizens/{id}` | Get citizen by ID |
+| POST | `/api/citizens` | Create new citizen |
+| PUT | `/api/citizens/{id}` | Update citizen |
+| DELETE | `/api/citizens/{id}` | Delete citizen |
+
+---
+
+## Author
+
+**Cheela Akhil** — [LinkedIn](https://linkedin.com/in/cheelaakhil) · [GitHub](https://github.com/cheelaakhil)
