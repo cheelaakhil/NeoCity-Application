@@ -69,7 +69,7 @@
                 <span class="text-label-sm font-bold text-primary uppercase tracking-widest">Energy Grid</span>
             </div>
             <div class="flex items-end gap-2 mb-6">
-                <span class="font-headline-xl text-5xl">428</span><span class="text-outline mb-2">kWh</span>
+                <span class="font-headline-xl text-5xl" id="gridLoad">--</span><span class="text-outline mb-2">kWh</span>
             </div>
             <div class="w-full h-24 mt-auto flex items-end justify-between gap-2">
                 <div class="w-full bg-primary/20 rounded-t-md hover:bg-primary/40" style="height: 60%"></div>
@@ -83,14 +83,35 @@
                 <span class="text-label-sm font-bold text-tertiary uppercase tracking-widest">H2O Reservoir</span>
             </div>
             <div class="flex items-end gap-2 mb-6">
-                <span class="font-headline-xl text-5xl">1.2k</span><span class="text-outline mb-2">m³</span>
+                <span class="font-headline-xl text-5xl" id="reservoirLevel">--</span><span class="text-outline mb-2">m³</span>
             </div>
             <div class="w-full h-24 flex items-center justify-center mt-auto">
                 <div class="w-full h-4 bg-surface-container rounded-full overflow-hidden">
-                    <div class="h-full bg-tertiary w-3/4 shadow-[0_0_15px_rgba(78,222,163,0.5)]"></div>
+                    <div id="reservoirBar" class="h-full bg-tertiary w-0 transition-all duration-1000 shadow-[0_0_15px_rgba(78,222,163,0.5)]"></div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+<script>
+    async function fetchUtilityData() {
+        try {
+            const res = await fetch('/api/utility-status');
+            const data = await res.json();
+            
+            document.getElementById('gridLoad').innerText = data.gridLoad;
+            document.getElementById('reservoirLevel').innerText = data.reservoirLevel + 'k';
+            
+            const fillPercentage = (data.reservoirLevel / data.reservoirMax) * 100;
+            document.getElementById('reservoirBar').style.width = fillPercentage + '%';
+        } catch(e) {
+            console.error("Failed to fetch utility data", e);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchUtilityData();
+        setInterval(fetchUtilityData, 5000); // Poll every 5s
+    });
+</script>
 </body></html>

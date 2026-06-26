@@ -125,9 +125,9 @@
         </div>
         <div class="absolute bottom-8 left-8 right-8 flex justify-between items-center z-20 bg-surface/40 backdrop-blur-md p-4 rounded-xl border border-outline-variant/30">
             <div class="flex gap-8">
-                <div><p class="text-[10px] text-on-surface-variant uppercase">Avg Heart Rate</p><p class="text-body-lg font-bold text-primary">72 BPM</p></div>
-                <div><p class="text-[10px] text-on-surface-variant uppercase">Stress Index</p><p class="text-body-lg font-bold text-secondary">0.24 ↓</p></div>
-                <div><p class="text-[10px] text-on-surface-variant uppercase">Active Sensors</p><p class="text-body-lg font-bold">98.9%</p></div>
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Avg Heart Rate</p><p class="text-body-lg font-bold text-primary" id="avgBpm">-- BPM</p></div>
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Stress Index</p><p class="text-body-lg font-bold text-secondary" id="stressIndex">-- ↓</p></div>
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Active Sensors</p><p class="text-body-lg font-bold" id="activeSensors">--%</p></div>
             </div>
         </div>
     </div>
@@ -136,26 +136,67 @@
         <h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
             <span class="material-symbols-outlined text-error">local_hospital</span> Hospital Nodes
         </h2>
-        <div class="space-y-4 overflow-y-auto scroll-hide">
-            <div class="flex items-center justify-between p-4 bg-surface-container-high/40 rounded-2xl border border-outline-variant/20">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20"><span class="text-primary font-bold">NW</span></div>
-                    <div><p class="font-bold text-on-surface">NeoWest Medical</p><p class="text-label-sm text-on-surface-variant">Est. wait: 12 min</p></div>
-                </div>
-                <div class="text-right">
-                    <div class="text-headline-md font-bold text-tertiary">84%</div>
-                    <div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden"><div class="bg-tertiary h-full w-[84%]"></div></div>
-                </div>
-            </div>
+        <div class="space-y-4 overflow-y-auto scroll-hide" id="hospitalNodes">
+            <div class="text-center text-outline py-8">Syncing with hospital nodes...</div>
         </div>
-        <button class="mt-auto w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+        <button onclick="scheduleEmergency()" class="mt-auto w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
             Schedule Emergency Portal
         </button>
     </div>
 </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 <script>
+    async function fetchHealthData() {
+        try {
+            const res = await fetch('/api/health-metrics');
+            const data = await res.json();
+            
+            document.getElementById('avgBpm').innerText = data.avgBpm + ' BPM';
+            document.getElementById('stressIndex').innerText = data.stressIndex + ' ↓';
+            document.getElementById('activeSensors').innerText = data.activeSensors + '%';
+            
+            const hospitalsContainer = document.getElementById('hospitalNodes');
+            hospitalsContainer.innerHTML = '';
+            
+            data.hospitals.forEach(h => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-4 bg-surface-container-high/40 rounded-2xl border border-outline-variant/20";
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-${h.color}/10 flex items-center justify-center border border-${h.color}/20"><span class="text-${h.color} font-bold">${h.code}</span></div>
+                        <div><p class="font-bold text-on-surface">${h.name}</p><p class="text-label-sm text-on-surface-variant">Est. wait: ${h.wait}</p></div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-headline-md font-bold text-${h.color}">${h.capacity}%</div>
+                        <div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden"><div class="bg-${h.color} h-full w-[${h.capacity}%]"></div></div>
+                    </div>
+                `;
+                hospitalsContainer.appendChild(div);
+            });
+        } catch(e) {
+            console.error("Failed to fetch health data", e);
+        }
+    }
+
+    function scheduleEmergency() {
+        Toastify({
+            text: "✅ Emergency Portal Request Transmitted. Connecting to Command Center...",
+            duration: 3000, gravity: "top", position: "center", 
+            style: { background: "#4edea3", color: "#002113", borderRadius: "10px", fontWeight: "bold" }
+        }).showToast();
+        
+        setTimeout(() => {
+            window.location.href = 'chat.html';
+        }, 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchHealthData();
+        setInterval(fetchHealthData, 8000); // Poll every 8s
+
         document.querySelectorAll('.glass-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -172,5 +213,6 @@
                 card.style.transform = '';
             });
         });
+    });
 </script>
 </body></html>

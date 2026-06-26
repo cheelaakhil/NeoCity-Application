@@ -1,90 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Join the Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { margin: 0; padding: 0; font-family: 'Outfit', sans-serif; background: #0f172a; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 10s infinite alternate; }
-        .orb-1 { width: 300px; height: 300px; background: #10b981; top: -50px; right: -50px; }
-        .orb-2 { width: 200px; height: 200px; background: #3b82f6; bottom: -50px; left: -50px; animation-delay: -5s; }
-        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, 50px); } }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
-            padding: 50px; width: 400px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10;
+    <title>NeoCity | Request Access</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#161c28",
+                    "surface-container-highest": "#2f3542",
+                    "surface-container-high": "#242a36",
+                    "outline-variant": "#3d494c",
+                    "primary": "#4cd7f6",
+                    "on-primary": "#003640",
+                    "surface": "#0e131f",
+                    "on-surface": "#dde2f3",
+                    "on-surface-variant": "#bcc9cd"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Outfit"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Outfit"]
+            }
+          }
         }
-        
-        h2 { color: white; font-size: 2rem; margin-bottom: 10px; }
-        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
-
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { color: #cbd5e1; font-size: 0.85rem; display: block; margin-bottom: 8px; margin-left: 5px; }
-        .inp { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 1rem; }
-        .inp:focus { border-color: #10b981; background: rgba(0,0,0,0.5); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
-
-        .btn-register { width: 100%; padding: 14px; background: linear-gradient(90deg, #10b981, #059669); border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-register:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
-
-        .footer-link { margin-top: 25px; display: block; color: #94a3b8; font-size: 0.9rem; text-decoration: none; }
-        .footer-link span { color: #10b981; font-weight: 600; }
-        .footer-link:hover { color: white; }
+      }
+    </script>
+    <style>
+        body { background-color: #0e131f; color: #dde2f3; overflow-x: hidden; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
-<body>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+<body class="font-body-md selection:bg-primary selection:text-on-primary">
 
-    <div class="glass-panel">
-        <h2>Join NeoCity</h2>
-        <p>Create your unified city identity.</p>
-
-        <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" class="inp" id="name" placeholder="John Doe">
-        </div>
-        <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" class="inp" id="email" placeholder="citizen@neocity.com">
-        </div>
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" class="inp" id="password" placeholder="Create a password">
-        </div>
-
-        <button class="btn-register" onclick="handleRegister()">Create Account</button>
-
-        <a href="login.html" class="footer-link">Already a member? <span>Sign In</span></a>
+    <div class="fixed inset-0 overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] animate-pulse"></div>
+        <div class="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-green-500/10 blur-[100px]"></div>
     </div>
 
+    <div class="absolute top-8 left-8 flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+        <span class="material-symbols-outlined text-primary text-3xl">domain</span>
+        <span class="font-headline-md text-2xl font-black tracking-tighter text-primary">NeoCity</span>
+    </div>
+
+    <div class="w-full max-w-md bg-surface-container-low/40 backdrop-blur-xl border border-outline-variant/30 rounded-3xl p-10 shadow-2xl relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+        
+        <h2 class="font-headline-xl text-3xl font-bold text-on-surface mb-2">Join NeoCity</h2>
+        <p class="text-on-surface-variant text-sm mb-8">Register your citizen profile to access the grid.</p>
+
+        <div class="flex flex-col gap-5">
+            <div>
+                <label class="block text-label-sm text-outline-variant uppercase tracking-widest font-bold mb-2">Full Name</label>
+                <input type="text" id="name" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:border-primary outline-none transition-colors" placeholder="John Doe">
+            </div>
+            <div>
+                <label class="block text-label-sm text-outline-variant uppercase tracking-widest font-bold mb-2">Email Identity</label>
+                <input type="email" id="email" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:border-primary outline-none transition-colors" placeholder="citizen@neocity.com">
+            </div>
+            <div>
+                <label class="block text-label-sm text-outline-variant uppercase tracking-widest font-bold mb-2">Passcode</label>
+                <input type="password" id="password" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:border-primary outline-none transition-colors" placeholder="••••••••">
+            </div>
+            
+            <button onclick="register()" class="w-full bg-primary hover:bg-primary/90 text-on-primary font-bold py-3 mt-4 rounded-xl shadow-[0_0_15px_rgba(76,215,246,0.3)] hover:scale-[1.02] transition-all">
+                Initialize Profile
+            </button>
+        </div>
+
+        <p class="text-center text-sm text-on-surface-variant mt-8">
+            Already verified? <a href="login.html" class="text-primary font-bold hover:underline">Authenticate Here</a>
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <script>
-        async function handleRegister() {
+        async function register() {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            if(!name || !email || !password) {
-                alert("Please fill in all fields");
-                return;
-            }
 
-            const res = await fetch('/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ name, email, password })
-            });
-            const data = await res.json();
-            
-            if(data.success) {
-                alert("Account Created! Redirecting to Login...");
-                window.location.href = 'login.html';
-            } else {
-                alert("Error: " + data.message);
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await res.json();
+                if(data.success) {
+                    Toastify({ text: "Profile Created! Redirecting...", duration: 2000, style: { background: "#4cd7f6", color: "#003640", borderRadius: "10px" } }).showToast();
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    Toastify({ text: data.message, duration: 3000, style: { background: "#ffb4ab", color: "#690005", borderRadius: "10px" } }).showToast();
+                }
+            } catch(e) {
+                Toastify({ text: "Server Error", duration: 3000, style: { background: "#ffb4ab", color: "#690005", borderRadius: "10px" } }).showToast();
             }
         }
     </script>

@@ -361,4 +361,46 @@ app.post('/api/report', async (req, res) => {
     }
 });
 
+// ==========================================
+// NEOCITY DATA API (Simulated Metrics)
+// ==========================================
+
+app.get('/api/transit-status', (req, res) => {
+    // Simulated live transit metrics
+    res.json({
+        activeFleets: Math.floor(Math.random() * (150 - 110) + 110),
+        avgVelocity: Math.floor(Math.random() * (450 - 380) + 380),
+        feed: [
+            { station: "Central District", line: "Line Blue", fleet: `#${Math.floor(Math.random() * 900 + 100)}`, time: "02:45", status: "ON TIME", color: "primary" },
+            { station: "Sector 4 Nexus", line: "Line Purple", fleet: `#${Math.floor(Math.random() * 900 + 100)}`, time: "05:12", status: "APPROACHING", color: "secondary" },
+            { station: "Eastern Gate", line: "Line Green", fleet: `#${Math.floor(Math.random() * 900 + 100)}`, time: "11:00", status: "DELAYED", color: "error" }
+        ]
+    });
+});
+
+app.get('/api/health-metrics', (req, res) => {
+    // Simulated biometric and health infrastructure metrics
+    res.json({
+        cityWellness: (Math.random() * (98 - 90) + 90).toFixed(1),
+        activeAlerts: Math.floor(Math.random() * 5),
+        avgBpm: Math.floor(Math.random() * (85 - 65) + 65),
+        stressIndex: (Math.random() * (0.4 - 0.1) + 0.1).toFixed(2),
+        activeSensors: (Math.random() * (99.9 - 95.0) + 95.0).toFixed(1),
+        hospitals: [
+            { name: "NeoWest Medical", code: "NW", wait: "12 min", capacity: Math.floor(Math.random() * 100), color: "primary" },
+            { name: "Sector Core Trauma", code: "SC", wait: "45 min", capacity: Math.floor(Math.random() * 100), color: "secondary" },
+            { name: "Eastern Eye & Bio", code: "EE", wait: "5 min", capacity: Math.floor(Math.random() * 100), color: "tertiary" }
+        ]
+    });
+});
+
+app.get('/api/utility-status', (req, res) => {
+    // Simulated utility metrics
+    res.json({
+        reservoirLevel: (Math.random() * (1.5 - 0.8) + 0.8).toFixed(1),
+        reservoirMax: 2.0,
+        gridLoad: Math.floor(Math.random() * (95 - 60) + 60)
+    });
+});
+
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

@@ -116,11 +116,11 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="p-4 bg-surface-container-high/30 rounded-lg border border-outline-variant/20">
                     <div class="text-label-sm text-outline mb-1 uppercase tracking-wider">Active Fleets</div>
-                    <div class="text-headline-lg font-black text-primary">128</div>
+                    <div class="text-headline-lg font-black text-primary" id="activeFleets">--</div>
                 </div>
                 <div class="p-4 bg-surface-container-high/30 rounded-lg border border-outline-variant/20">
                     <div class="text-label-sm text-outline mb-1 uppercase tracking-wider">Avg Velocity</div>
-                    <div class="text-headline-lg font-black text-secondary">420<span class="text-body-md font-normal text-outline ml-1">km/h</span></div>
+                    <div class="text-headline-lg font-black text-secondary"><span id="avgVelocity">--</span><span class="text-body-md font-normal text-outline ml-1">km/h</span></div>
                 </div>
             </div>
         </div>
@@ -128,47 +128,49 @@
             <div class="flex items-center gap-2 mb-6">
                 <h2 class="font-headline-md text-headline-md text-on-surface">Station Arrival Feed</h2>
             </div>
-            <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 bg-surface-container-high/20 rounded-lg border-l-4 border-primary">
-                    <div><div class="font-bold text-on-surface">Central District</div><div class="text-label-sm text-outline">Line Blue • Fleet #402</div></div>
-                    <div class="text-right"><div class="text-headline-md font-bold text-primary neon-text-cyan">02:45</div><div class="text-label-sm text-tertiary">ON TIME</div></div>
-                </div>
-                <div class="flex items-center justify-between p-4 bg-surface-container-high/20 rounded-lg border-l-4 border-secondary">
-                    <div><div class="font-bold text-on-surface">Sector 4 Nexus</div><div class="text-label-sm text-outline">Line Purple • Fleet #119</div></div>
-                    <div class="text-right"><div class="text-headline-md font-bold text-secondary">05:12</div><div class="text-label-sm text-outline">APPROACHING</div></div>
-                </div>
+            <div class="space-y-4" id="stationFeed">
+                <div class="text-center text-outline">Loading live feed...</div>
             </div>
         </div>
     </div>
 </div>
 </main>
 <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const counters = document.querySelectorAll('.text-headline-lg.font-black');
-            counters.forEach(counter => {
-                const target = parseInt(counter.innerText);
-                if (!isNaN(target)) {
-                    let count = 0;
-                    const updateCount = () => {
-                        const increment = target / 100;
-                        if (count < target) {
-                            count += increment;
-                            counter.innerText = Math.ceil(count);
-                            setTimeout(updateCount, 10);
-                        } else {
-                            counter.innerText = target;
-                        }
-                    };
-                    updateCount();
-                }
-            });
+    async function fetchTransitData() {
+        try {
+            const res = await fetch('/api/transit-status');
+            const data = await res.json();
             
-            setInterval(() => {
-                const nodes = document.querySelectorAll('.pulse-node');
-                const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
-                randomNode.style.opacity = '1';
-                setTimeout(() => { randomNode.style.opacity = '0.6'; }, 200);
-            }, 3000);
-        });
+            document.getElementById('activeFleets').innerText = data.activeFleets;
+            document.getElementById('avgVelocity').innerText = data.avgVelocity;
+            
+            const feedContainer = document.getElementById('stationFeed');
+            feedContainer.innerHTML = '';
+            
+            data.feed.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-4 bg-surface-container-high/20 rounded-lg border-l-4 border-${item.color}`;
+                div.innerHTML = `
+                    <div><div class="font-bold text-on-surface">${item.station}</div><div class="text-label-sm text-outline">${item.line} • Fleet ${item.fleet}</div></div>
+                    <div class="text-right"><div class="text-headline-md font-bold text-${item.color} neon-text-cyan">${item.time}</div><div class="text-label-sm text-outline">${item.status}</div></div>
+                `;
+                feedContainer.appendChild(div);
+            });
+        } catch(e) {
+            console.error("Failed to fetch transit data", e);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchTransitData();
+        setInterval(fetchTransitData, 10000); // Poll every 10s
+        
+        setInterval(() => {
+            const nodes = document.querySelectorAll('.pulse-node');
+            const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+            randomNode.style.opacity = '1';
+            setTimeout(() => { randomNode.style.opacity = '0.6'; }, 200);
+        }, 3000);
+    });
 </script>
 </body></html>
