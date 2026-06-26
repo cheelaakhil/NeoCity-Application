@@ -120,25 +120,32 @@ async function fetchNearbyPlaces(lat, lon, categoryKey) {
 
     // --- ATTEMPT 1: LIVE SATELLITE (OSM) ---
     const osmTag = CATEGORY_MAP[categoryKey];
-    const query = `[out:json];(node[${osmTag}](around:5000,${lat},${lon});way[${osmTag}](around:5000,${lat},${lon}););out center 10;`;
+    const query = `[out:json];(node[${osmTag}](around:50000,${lat},${lon});way[${osmTag}](around:50000,${lat},${lon}););out center 10;`;
     const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
     try {
         console.log(`🌍 OSM: Fetching "${categoryKey}"...`);
-        const response = await customFetch(url);
+        const response = await customFetch(url, {
+            headers: {
+                'User-Agent': 'SmartCitizenApp/1.0 (contact@smartcitizen.local)'
+            }
+        });
         if (!response.ok) throw new Error(`OSM returned HTTP ${response.status}`);
         const data = await response.json();
 
         if (data.elements && data.elements.length > 0) {
-            finalResults = data.elements.map(place => ({
-                id: place.id.toString(),
-                name: place.tags?.name || `${categoryKey.toUpperCase()} (Live)`,
-                type: categoryKey,
-                lat: place.lat ?? place.center?.lat,
-                lon: place.lon ?? place.center?.lon,
-                link: place.tags?.website || `https://www.google.com/search?q=${encodeURIComponent(categoryKey + ' near me')}`,
-                source: 'Live Satellite'
-            }));
+            finalResults = data.elements.map(place => {
+                const placeName = place.tags?.name || `${categoryKey.toUpperCase()} (Live)`;
+                return {
+                    id: place.id.toString(),
+                    name: placeName,
+                    type: categoryKey,
+                    lat: place.lat ?? place.center?.lat,
+                    lon: place.lon ?? place.center?.lon,
+                    link: place.tags?.website || `https://www.google.com/search?q=${encodeURIComponent(placeName + ' ' + categoryKey)}`,
+                    source: 'Live Satellite'
+                };
+            });
             console.log(`✅ OSM: Found ${finalResults.length} results.`);
         } else {
             console.log(`⚠️ OSM: No results for "${categoryKey}". Trying Supabase...`);
@@ -147,27 +154,26 @@ async function fetchNearbyPlaces(lat, lon, categoryKey) {
         console.warn(`⚠️ OSM fetch failed: ${error.message}. Switching to Supabase.`);
     }
 
-    // --- ATTEMPT 2: SUPABASE SDK BACKUP ---
+    // --- ATTEMPT 2: DYNAMIC DEMO FALLBACK ---
     if (finalResults.length === 0) {
-        console.log(`📂 Supabase: Querying for "${categoryKey}"...`);
-        const { data, error } = await supabase
-            .from('services')
-            .select('*')
-            .or(`tags.ilike.%${categoryKey}%,type.ilike.%${categoryKey}%`);
-
-        if (error) {
-            console.error('❌ Supabase query error:', error.message);
-        } else if (data && data.length > 0) {
-            console.log(`✅ Supabase: Found ${data.length} records.`);
-            finalResults = data.map(row => ({
-                ...row,
-                lat: parseFloat(row.lat),
-                lon: parseFloat(row.lon),
-                source: 'Supabase Cloud'
-            }));
-        } else {
-            console.log(`⚠️ Supabase: No records found for "${categoryKey}".`);
-        }
+        console.log(`⚠️ Generating dynamic local mock location for demo...`);
+        
+        // Generate a fake location roughly 1-3 km away from their exact GPS coordinates
+        // 0.01 to 0.03 decimal degrees is roughly 1 to 3 kilometers.
+        const offsetLat = lat + (Math.random() > 0.5 ? 1 : -1) * (0.01 + Math.random() * 0.02);
+        const offsetLon = lon + (Math.random() > 0.5 ? 1 : -1) * (0.01 + Math.random() * 0.02);
+        
+        const friendlyName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+        const demoName = `Local ${friendlyName} Center (Demo)`;
+        finalResults = [{
+            id: `demo_${Date.now()}`,
+            name: demoName,
+            type: categoryKey,
+            lat: offsetLat,
+            lon: offsetLon,
+            link: `https://www.google.com/search?q=${encodeURIComponent(demoName)}`,
+            source: 'Demo Generator'
+        }];
     }
 
     // Attach distance + rating, then sort by closest

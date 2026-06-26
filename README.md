@@ -1,4 +1,4 @@
-# 🏙️ SMART Citizen | Future City OS
+# 🏙️ NeoCity | Future City OS
 
 <div align="center">
   <p>A unified, real-time command center connecting Citizens, Emergency Services, and Government Infrastructure. Faster than a call. Smarter than a map.</p>
@@ -6,7 +6,7 @@
 
 ## 🚀 Overview
 
-**SMART Citizen** is a Next-Gen Urban Operating System designed to streamline access to essential city services. Whether it's finding the nearest hospital with available beds, triggering an immediate SOS, or tracking down the closest public transit or ATM, SMART Citizen relies on live satellite data and cloud-synced databases to deliver zero-latency results.
+**NeoCity** is a Next-Gen Urban Operating System designed to streamline access to essential city services. Whether it's finding the nearest hospital with available beds, triggering an immediate SOS, or tracking down the closest public transit or ATM, NeoCity relies on live satellite data and cloud-synced databases to deliver zero-latency results.
 
 ## ✨ Features
 
@@ -26,7 +26,7 @@
 ## 📂 Project Structure
 
 ```text
-smart-citizen-Application/
+NeoCity/
 ├── public/                 # Frontend Assets
 │   ├── css/                # Styling (Glassmorphism, Animations)
 │   ├── index.html          # Landing Page
@@ -42,8 +42,8 @@ smart-citizen-Application/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/cheelaakhil/smart-citizen-Application.git
-   cd smart-citizen-Application
+   git clone https://github.com/cheelaakhil/NeoCity.git
+   cd NeoCity
    ```
 
 2. **Install Dependencies**

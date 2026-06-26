@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NeoCity | Health Node &amp; Bio-Monitoring</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#161c28",
+                    "on-background": "#dde2f3",
+                    "secondary": "#d0bcff",
+                    "on-primary": "#003640",
+                    "secondary-container": "#571bc1",
+                    "on-secondary": "#3c0091",
+                    "surface": "#0e131f",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-container": "#00424f",
+                    "surface-container-highest": "#2f3542",
+                    "surface-container-high": "#242a36",
+                    "outline": "#869397",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#4cd7f6",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "inverse-surface": "#dde2f3",
+                    "surface-dim": "#0e131f",
+                    "surface-bright": "#343946",
+                    "background": "#0e131f",
+                    "secondary-fixed": "#e9ddff",
+                    "primary-fixed-dim": "#4cd7f6",
+                    "on-surface-variant": "#bcc9cd",
+                    "on-surface": "#dde2f3",
+                    "on-primary-fixed": "#001f26",
+                    "primary": "#4cd7f6",
+                    "on-secondary-fixed": "#23005c",
+                    "on-error": "#690005",
+                    "surface-container-lowest": "#080e1a",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "inverse-on-surface": "#2b303d",
+                    "tertiary-container": "#1bbd85",
+                    "primary-fixed": "#acedff",
+                    "error": "#ffb4ab",
+                    "surface-variant": "#2f3542",
+                    "tertiary": "#4edea3",
+                    "error-container": "#93000a",
+                    "on-primary-fixed-variant": "#004e5c",
+                    "on-tertiary-container": "#00452e",
+                    "on-secondary-container": "#c4abff",
+                    "outline-variant": "#3d494c",
+                    "on-tertiary": "#003824",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "inverse-primary": "#00687a",
+                    "primary-container": "#06b6d4",
+                    "surface-container": "#1a202c"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Outfit"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "body-lg": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #0e131f; color: #dde2f3; overflow-x: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .glass-card:hover { transform: translateY(-4px) rotateX(2deg); box-shadow: 0 10px 30px -10px rgba(76, 215, 246, 0.3); }
+        .neon-glow-primary { box-shadow: 0 0 15px rgba(76, 215, 246, 0.4); }
+        .pulse-emerald { animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse-emerald { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(1.1); } }
+        .health-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+        .scanline { width: 100%; height: 2px; background: linear-gradient(to right, transparent, #4cd7f6, transparent); position: absolute; top: 0; left: 0; animation: scanline 4s linear infinite; z-index: 10; opacity: 0.3; }
+        @keyframes scanline { 0% { top: 0; } 100% { top: 100%; } }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<div class="fixed inset-0 overflow-hidden -z-10 pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] animate-pulse"></div>
+<div class="absolute bottom-[10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-secondary-container/10 blur-[100px]"></div>
+</div>
+
+<nav class="fixed top-0 w-full z-50 bg-surface/10 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_0_15px_rgba(76,215,246,0.3)] flex justify-between items-center px-6 h-20">
+    <div class="flex items-center gap-8 cursor-pointer" onclick="window.location.href='home.html'">
+        <span class="font-headline-lg text-headline-lg font-black tracking-tighter text-primary dark:text-primary-fixed">NeoCity</span>
+    </div>
+    <div class="hidden md:flex gap-6">
+        <a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="home.html">Dashboard</a>
+        <a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="chat.html">Command Center</a>
+        <a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Health Node</a>
+    </div>
+</nav>
+
+<main class="pt-24 px-6 pb-10 max-w-screen-xl mx-auto">
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div>
+        <div class="flex items-center gap-2 mb-2">
+            <span class="w-3 h-3 rounded-full bg-tertiary pulse-emerald"></span>
+            <span class="text-tertiary font-label-sm uppercase tracking-tighter">Bio-Network Online</span>
+        </div>
+        <h1 class="font-headline-xl text-headline-xl text-on-surface">Health Node Central</h1>
+        <p class="text-body-lg text-on-surface-variant max-w-2xl">Real-time monitoring of NeoCity municipal health infrastructure and anonymized citizen biometric streams.</p>
+    </div>
+</header>
+
+<div class="health-grid">
+    <div class="col-span-12 lg:col-span-8 glass-card rounded-3xl p-8 relative overflow-hidden h-[450px]">
+        <div class="scanline"></div>
+        <div class="flex justify-between items-start mb-8 relative z-20">
+            <div>
+                <h2 class="font-headline-md text-headline-md text-on-surface">Aggregated Biometric Flux</h2>
+                <p class="text-label-sm text-on-surface-variant">Anonymized stream from 4.2M connected nodes</p>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-8 right-8 flex justify-between items-center z-20 bg-surface/40 backdrop-blur-md p-4 rounded-xl border border-outline-variant/30">
+            <div class="flex gap-8">
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Avg Heart Rate</p><p class="text-body-lg font-bold text-primary">72 BPM</p></div>
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Stress Index</p><p class="text-body-lg font-bold text-secondary">0.24 ↓</p></div>
+                <div><p class="text-[10px] text-on-surface-variant uppercase">Active Sensors</p><p class="text-body-lg font-bold">98.9%</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-4 glass-card rounded-3xl p-6 flex flex-col">
+        <h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-error">local_hospital</span> Hospital Nodes
+        </h2>
+        <div class="space-y-4 overflow-y-auto scroll-hide">
+            <div class="flex items-center justify-between p-4 bg-surface-container-high/40 rounded-2xl border border-outline-variant/20">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20"><span class="text-primary font-bold">NW</span></div>
+                    <div><p class="font-bold text-on-surface">NeoWest Medical</p><p class="text-label-sm text-on-surface-variant">Est. wait: 12 min</p></div>
+                </div>
+                <div class="text-right">
+                    <div class="text-headline-md font-bold text-tertiary">84%</div>
+                    <div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden"><div class="bg-tertiary h-full w-[84%]"></div></div>
+                </div>
+            </div>
+        </div>
+        <button class="mt-auto w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            Schedule Emergency Portal
+        </button>
+    </div>
+</div>
+</main>
+
+<script>
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+</script>
+</body></html>
