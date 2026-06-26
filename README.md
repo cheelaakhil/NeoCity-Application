@@ -83,5 +83,5 @@ This project uses **Supabase** for user authentication and backend storage.
 ## 👨‍💻 Author
 
 **Cheela Akhil**
-- [LinkedIn](https://linkedin.com/in/cheelaakhil)
+- [LinkedIn](https://www.linkedin.com/in/akhil-cheela-8a72a0292/)
 - [GitHub](https://github.com/cheelaakhil)
