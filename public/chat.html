@@ -222,7 +222,22 @@
         
         function triggerSOS() {
             if(!userLocation) return alert("Waiting for GPS...");
-            window.open(`https://wa.me/?text=🚨 EMERGENCY! Help needed at: http://maps.google.com/?q=${userLocation.lat},${userLocation.lon}`, '_blank');
+            
+            let emergencyContact = localStorage.getItem('emergencyContact');
+            if (!emergencyContact) {
+                emergencyContact = prompt("🚨 Set Emergency Contact\n\nEnter the WhatsApp number (with country code, e.g., 919876543210) to notify during an SOS:");
+                if (emergencyContact) {
+                    // Clean the number (remove spaces, +, dashes)
+                    emergencyContact = emergencyContact.replace(/[^0-9]/g, '');
+                    localStorage.setItem('emergencyContact', emergencyContact);
+                }
+            }
+            
+            const waUrl = emergencyContact 
+                ? `https://wa.me/${emergencyContact}?text=🚨 EMERGENCY! Help needed at: http://maps.google.com/?q=${userLocation.lat},${userLocation.lon}`
+                : `https://wa.me/?text=🚨 EMERGENCY! Help needed at: http://maps.google.com/?q=${userLocation.lat},${userLocation.lon}`;
+                
+            window.open(waUrl, '_blank');
             sendQuick("Emergency SOS");
         }
 
